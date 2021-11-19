@@ -1,36 +1,47 @@
-import Canvas from "./Canvas";
+import Canvas from "./Canvas.js";
+import Drawable, { IDrawable } from "./Drawable.js";
 
 export type Color = string;
 export type Coordinat = number;
 
-interface INodule {
+interface INodule extends Omit<IDrawable, "draw"> {
 	textContent: string;
-	x: Coordinat;
-	y: Coordinat;
 	bordered: boolean;
 	borderColor: Color;
 
 	draw: (canvas: Canvas) => void;
 }
 
-class Nodule implements INodule {
+class Nodule extends Drawable implements INodule {
 	textContent = "";
-	x = 0;
-	y = 0;
+
 	bordered = true;
 	borderColor = "black";
 
-	constructor(textContent: string) {
+	constructor(textContent: string, x?: number, y?: number) {
+		super();
+
 		if (textContent) {
 			this.textContent = textContent;
 		}
+
+		if (x !== undefined) {
+			this.x = x;
+		}
+
+		if (y !== undefined) {
+			this.y = y;
+		}
 	}
 
+	// Todo
+	// @ts-ignore
 	draw(canvas: Canvas) {
 		const { context } = canvas;
 
 		context.beginPath();
-		context.strokeText(this.textContent, this.x, this.y);
+		context.font = "48px serif";
+		context.fillText(this.textContent, this.x, this.y);
 	}
 }
 
