@@ -96,9 +96,8 @@ class Application implements IApplication {
 		if (this.mouse.dwheel) {
 			const step: number = this.mouse.dwheel / 530;
 			const pscale: number = this.scale;
-			this.scale += step;
 
-			const sign: Sign = step > 0 ? 1 : step < 0 ? -1 : 0;
+			this.scale += step;
 
 			if (this.scale < 0.1) {
 				this.scale = 0.1;
@@ -108,14 +107,17 @@ class Application implements IApplication {
 				this.scale = 5;
 			}
 
-			// this.offsetX -=
-			// 	(this.offsetX - this.mouse.clientX) * pscale -
-			// 	(this.offsetX - this.mouse.clientX) * this.scale;
-			// this.offsetY +=
-			// 	(this.offsetY - this.mouse.clientY) * pscale -
-			// 	(this.offsetY - this.mouse.clientY) * this.scale;
+			if (this.scale !== pscale) {
+				this.offsetX =
+					this.mouse.clientX -
+					((this.mouse.clientX - this.offsetX) * this.scale) / pscale;
 
-			this.drawed = true;
+				this.offsetY =
+					this.mouse.clientY -
+					((this.mouse.clientY - this.offsetY) * this.scale) / pscale;
+
+				this.drawed = true;
+			}
 		}
 
 		if (this.mode === Mode.TRANSLATE) {
